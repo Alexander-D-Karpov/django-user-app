@@ -1,0 +1,127 @@
+{% extends "user/base_user.html" %}
+{% load static %}
+{% block name %}
+    {{ u.username }}
+{% endblock %}
+
+{% block extra_head %}
+    <style>body {
+        background: #eee
+    }
+
+    .card {
+        border: none;
+        position: relative;
+        overflow: hidden;
+        border-radius: 8px;
+        cursor: pointer
+    }
+
+    .card:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: #1d7eff;
+        transform: scaleY(1);
+        transition: all 0.5s;
+        transform-origin: bottom
+    }
+
+    .card:after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 4px;
+        height: 100%;
+        background-color: blue;
+        transform: scaleY(0);
+        transition: all 0.5s;
+        transform-origin: bottom
+    }
+
+    .card:hover::after {
+        transform: scaleY(1)
+    }
+
+    .fonts {
+        font-size: 11px
+    }
+
+    .social-list {
+        display: flex;
+        list-style: none;
+        justify-content: center;
+        padding: 0
+    }
+
+    .social-list li {
+        padding: 10px;
+        color: #0d6efd;
+        font-size: 19px
+    }
+
+    .buttons button:nth-child(1) {
+        border: 1px solid #0d6efd !important;
+        color: #0d6efd;
+        height: 40px
+    }
+
+    .buttons button:nth-child(1):hover {
+        border: 1px solid #0d6efd !important;
+        color: #adb5bd;
+        height: 40px;
+        background-color: #0d6efd
+    }
+
+    .buttons button:nth-child(2) {
+        border: 1px solid #0d6efd !important;
+        background-color: #0d6efd;
+        color: #adb5bd;
+        height: 40px
+    }</style>
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-7">
+                <div class="card p-3 py-4">
+                    {% if u.image %}
+                        <div class="text-center"><img src="{{ u.image.url }}" width="100" height="100"
+                                                      class="rounded-circle"></div>{% endif %}
+                    <div class="text-center mt-3">
+                        {% if u.is_superuser %}
+                            <p>
+                                <span class="bg-secondary p-1 px-4 rounded text-wrap text-white">admin</span>
+                            </p>
+                        {% endif %}
+                        {% if u.solves %}
+                        <p>
+                            <span class="bg-secondary p-1 px-4 rounded text-wrap text-white">flags 0wn3d: {{ u.solves }}</span>
+                        </p>
+                        {% endif %}
+                        {% if u.first_name or u.second_name %}
+                            <h5 class="mt-2 mb-0">{{ u.first_name }} {{ u.second_name }}</h5>{% endif %}
+                        <h2>{{ u.username }}</h2>
+                        <div class="px-4 mt-1">
+                            <p class="fonts">{{ u.about }}</p>
+                            {% if posts %}
+                            <p><button onclick="window.location.href='{% url 'index' %}?user={{ u.username }}'" type="button" class="btn btn-outline-primary">read posts</button></p>
+                            {% endif %}
+                        </div>
+                        <ul class="social-list">
+                            {% if tg_user %}
+                            <button onclick="window.location.href='https://t.me/{{ tg_user }}';" class="btn btn-outline-primary" role="button"><i class="bi bi-telegram" role="img" aria-label="{{ tg_user }}"></i></button>
+                            {% endif %}
+                        </ul>
+                        <!--<div class="buttons"> <button class="btn btn-outline-primary px-4">Message</button> <button class="btn btn-primary px-4 ms-3">Contact</button> </div>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

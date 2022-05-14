@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block nav_login %}
+<a style="color: white;" href="{% url "login" %}" class="nav-link px-0 align-middle">
+    <i class="fs-3 bi bi-box-arrow-in-right"></i><span class="fs-3 ms-1 d-none d-sm-inline">Login</span>
+</a>
+{% endblock %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="content">
+            <div class="section-inner clearfix">
+
+                <h1>Login</h1>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-danger m-2" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form action="?from={{ url }}" method="post">
+                    {% csrf_token %}
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td><input class="form-control form-control-lg m-2" type="text" id="id_username"
+                                       name="username" placeholder="username"></td>
+                        </tr>
+                        <tr>
+                            <td><label for="id_username"></label></td>
+                            <td><input class="form-control form-control-lg m-2" type="password" id="id_password"
+                                       name="password" placeholder="password"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><input class="btn btn-success m-2" type="submit" value="Submit"></td>
+                        </tr>
+                    </table>
+                </form>
+
+            </div>
+            <p>if you don't have account you can <a href="{% url 'register' %}"> register</a></p>
+        </div>
+    {% else %}
+        <br>
+        <h1>You are already loged in</h1>
+        <p><a href="{% url "logout" %}">log out</a> first</p>
+    {% endif %}
+{% endblock %}

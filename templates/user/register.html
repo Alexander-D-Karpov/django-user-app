@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block nav_register %}
+<a style="color: white;" href="{% url "register" %}" class="nav-link px-0 align-middle">
+    <i class="fs-3 bi bi-person-badge"></i><span class="fs-3 ms-1 d-none d-sm-inline">Register</span>
+</a>
+{% endblock %}
+
+{% block content %}
+    {% if not user.is_authenticated %}
+        <div class="login">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-danger m-2" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <h1>Create account</h1>
+
+            <form method="post" action="?from={{ url }}" class="was-validated">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input class="btn btn-success m-3" type="submit" value="Submit">
+            </form>
+            <p>if you already have account you can <a href="{% url 'login' %}"> log in</a></p>
+        </div>
+    {% else %}
+        <br>
+        <h1>You are already loged in</h1>
+        <p><a href="{% url "logout" %}">log out</a> first</p>
+    {% endif %}
+{% endblock %}
